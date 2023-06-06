@@ -8,6 +8,7 @@ import 'package:rick_and_morty/presentation/ui/screens/character_detail_screen.d
 import 'package:rick_and_morty/presentation/ui/widgets/dropdown_button.dart';
 import 'package:rick_and_morty/styles/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rick_and_morty/styles/dimensions.dart';
 
 class CharactersScreen extends StatefulWidget {
   const CharactersScreen({super.key});
@@ -188,7 +189,9 @@ class CharactersScreenState extends State<CharactersScreen> {
                     color: Colors.white,
                     elevation: 5.0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.RADIUS_10,
+                      ),
                     ),
                     child: ListTile(
                       leading: CircleAvatar(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rick_and_morty/presentation/states/character_detail_store.dart';
+import 'package:rick_and_morty/styles/dimensions.dart';
 import 'package:rick_and_morty/styles/text_styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -37,22 +38,28 @@ class CharacterDetailScreenState extends State<CharacterDetailScreen> {
               final character = _characterDetailStore.selectedCharacter!;
               return SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(
+                    AppDimensions.PADDING_16,
+                  ),
                   child: Column(
                     children: <Widget>[
                       Hero(
                         tag: character.id,
                         child: CircleAvatar(
-                          radius: 100,
+                          radius: AppDimensions.RADIUS_100,
                           backgroundImage: NetworkImage(character.image),
                         ),
                       ),
-                      const SizedBox(height: 16.0),
+                      const SizedBox(
+                        height: AppDimensions.ITEM_HEIGHT_16,
+                      ),
                       Text(
                         character.name,
                         style: AppTextStyles.heading1,
                       ),
-                      const SizedBox(height: 16.0),
+                      const SizedBox(
+                        height: AppDimensions.ITEM_HEIGHT_16,
+                      ),
                       Text(
                         '${AppLocalizations.of(context).status}: ${character.status}',
                         style: AppTextStyles.bodyText,
@@ -77,7 +84,9 @@ class CharacterDetailScreenState extends State<CharacterDetailScreen> {
                         '${AppLocalizations.of(context).location}: ${character.location.name}',
                         style: AppTextStyles.bodyText,
                       ),
-                      const SizedBox(height: 16.0),
+                      const SizedBox(
+                        height: AppDimensions.ITEM_HEIGHT_16,
+                      ),
                       ExpansionTile(
                         title: Text(
                           AppLocalizations.of(context).episodes,
