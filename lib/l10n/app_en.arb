@@ -1,0 +1,11 @@
+{
+  "appTitle": "Rick and Morty app",
+  "characterDetails": "Character details",
+  "status": "Status",
+  "species": "Species",
+  "type": "Type",
+  "gender": "Gender",
+  "origin": "Origin",
+  "location": "Location",
+  "episodes": "Episodes"
+}
