@@ -5,7 +5,9 @@ import 'package:rick_and_morty/domain/entity/character/gender.dart';
 import 'package:rick_and_morty/domain/entity/character/status.dart';
 import 'package:rick_and_morty/presentation/states/character_store.dart';
 import 'package:rick_and_morty/presentation/ui/screens/character_detail_screen.dart';
+import 'package:rick_and_morty/presentation/ui/widgets/dropdown_button.dart';
 import 'package:rick_and_morty/styles/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CharactersScreen extends StatefulWidget {
   const CharactersScreen({super.key});
@@ -41,7 +43,11 @@ class CharactersScreenState extends State<CharactersScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      if (_filterName.isNotEmpty || _filterStatus != Status.empty || _filterSpecies.isNotEmpty || _filterType.isNotEmpty || _filterGender != Gender.empty) {
+      if (_filterName.isNotEmpty ||
+          _filterStatus != Status.empty ||
+          _filterSpecies.isNotEmpty ||
+          _filterType.isNotEmpty ||
+          _filterGender != Gender.empty) {
         characterStore.fetchCharactersFiltered(
           name: _filterName,
           status: _filterStatus.value,
@@ -60,7 +66,7 @@ class CharactersScreenState extends State<CharactersScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Filter'),
+            title: Text(AppLocalizations.of(context).filter),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
@@ -68,69 +74,63 @@ class CharactersScreenState extends State<CharactersScreen> {
                     onChanged: (value) {
                       _filterName = value;
                     },
-                    decoration: const InputDecoration(
-                      hintText: 'Name',
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).name,
                     ),
                   ),
-                  InputDecorator(
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<Status>(
-                        value: _filterStatus,
-                        onChanged: (Status? newValue) {
-                          setState(() {
-                            _filterStatus = newValue ?? Status.empty;
-                          });
-                        },
-                        items: Status.values
-                            .map<DropdownMenuItem<Status>>((Status value) {
-                          return DropdownMenuItem<Status>(
-                            value: value,
-                            child: Text(value.value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                  dropdownButton<Status>(
+                    _filterStatus,
+                    (Status? newValue) {
+                      setState(() {
+                        _filterStatus = newValue ?? Status.empty;
+                      });
+                    },
+                    Status.values.map<DropdownMenuItem<Status>>((Status value) {
+                      return DropdownMenuItem<Status>(
+                        value: value,
+                        child: Text(value.value),
+                      );
+                    }).toList(),
+                    (BuildContext context) {
+                      return Status.values.map<Widget>((Status value) {
+                        return Text(_filterStatus.value);
+                      }).toList();
+                    },
                   ),
                   TextField(
                     onChanged: (value) {
                       _filterSpecies = value;
                     },
-                    decoration: const InputDecoration(
-                      hintText: 'Species',
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).species,
                     ),
                   ),
                   TextField(
                     onChanged: (value) {
                       _filterType = value;
                     },
-                    decoration: const InputDecoration(
-                      hintText: 'Type',
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).type,
                     ),
                   ),
-                  InputDecorator(
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<Gender>(
-                        value: _filterGender,
-                        onChanged: (Gender? newValue) {
-                          setState(() {
-                            _filterGender = newValue ?? Gender.empty;
-                          });
-                        },
-                        items: Gender.values
-                            .map<DropdownMenuItem<Gender>>((Gender value) {
-                          return DropdownMenuItem<Gender>(
-                            value: value,
-                            child: Text(value.value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                  dropdownButton<Gender>(
+                    _filterGender,
+                    (Gender? newValue) {
+                      setState(() {
+                        _filterGender = newValue ?? Gender.empty;
+                      });
+                    },
+                    Gender.values.map<DropdownMenuItem<Gender>>((Gender value) {
+                      return DropdownMenuItem<Gender>(
+                        value: value,
+                        child: Text(value.value),
+                      );
+                    }).toList(),
+                    (BuildContext context) {
+                      return Gender.values.map<Widget>((Gender value) {
+                        return Text(_filterGender.value);
+                      }).toList();
+                    },
                   ),
                 ],
               ),
@@ -148,7 +148,7 @@ class CharactersScreenState extends State<CharactersScreen> {
                     clearList: true,
                   );
                 },
-                child: const Text('Apply'),
+                child: Text(AppLocalizations.of(context).apply),
               ),
             ],
           );
@@ -167,7 +167,7 @@ class CharactersScreenState extends State<CharactersScreen> {
       Scaffold(
         backgroundColor: AppColors.transparentColor,
         appBar: AppBar(
-          title: const Text('Characters'),
+          title: Text(AppLocalizations.of(context).characters),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.filter_list),
@@ -196,7 +196,7 @@ class CharactersScreenState extends State<CharactersScreen> {
                       ),
                       title: Text(character.name),
                       subtitle: Text(
-                          '${character.location.name}\nStatus: ${character.status}'),
+                          '${character.location.name}\n${AppLocalizations.of(context).status}: ${character.status}'),
                       isThreeLine: true,
                       onTap: () {
                         Navigator.push(

@@ -1,7 +1,11 @@
 {
   "appTitle": "Rick and Morty app",
   "characterDetails": "Character details",
+  "filter": "Filter",
+  "apply": "Apply",
+  "characters": "Characters",
   "status": "Status",
+  "name": "Name",
   "species": "Species",
   "type": "Type",
   "gender": "Gender",
