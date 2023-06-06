@@ -2,6 +2,7 @@
   "appTitle": "Rick and Morty app",
   "characterDetails": "Character details",
   "filter": "Filter",
+  "reset": "Reset",
   "apply": "Apply",
   "characters": "Characters",
   "status": "Status",

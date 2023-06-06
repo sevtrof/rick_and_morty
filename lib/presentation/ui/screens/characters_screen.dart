@@ -42,25 +42,17 @@ class CharactersScreenState extends State<CharactersScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      if (_filterName.isNotEmpty ||
-          _filterStatus != Status.empty ||
-          _filterSpecies.isNotEmpty ||
-          _filterType.isNotEmpty ||
-          _filterGender != Gender.empty) {
-        characterStore.fetchCharactersFiltered(
-          name: _filterName,
-          status: _filterStatus.value,
-          species: _filterSpecies,
-          type: _filterType,
-          gender: _filterGender.value,
-        );
-      } else {
-        characterStore.fetchCharacters();
-      }
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      characterStore.fetchNextPage(
+        name: _filterName,
+        status: _filterStatus.value,
+        species: _filterSpecies,
+        type: _filterType,
+        gender: _filterGender.value,
+      );
     }
   }
+
 
   void _openFilterDialog() async {
     await showDialog(
@@ -137,6 +129,21 @@ class CharactersScreenState extends State<CharactersScreen> {
               ),
             ),
             actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  _resetFilters();
+                  Navigator.of(context).pop();
+                  characterStore.fetchCharactersFiltered(
+                    name: _filterName,
+                    status: _filterStatus.value,
+                    species: _filterSpecies,
+                    type: _filterType,
+                    gender: _filterGender.value,
+                    clearList: true,
+                  );
+                },
+                child: Text(AppLocalizations.of(context).reset),
+              ),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -243,5 +250,15 @@ class CharactersScreenState extends State<CharactersScreen> {
         ),
       ),
     ]);
+  }
+
+  void _resetFilters() {
+    setState(() {
+      _filterName = '';
+      _filterStatus = Status.empty;
+      _filterSpecies = '';
+      _filterType = '';
+      _filterGender = Gender.empty;
+    });
   }
 }

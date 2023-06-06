@@ -10,7 +10,7 @@ abstract class RickAndMortyService {
   factory RickAndMortyService(Dio dio, {String baseUrl}) = _RickAndMortyService;
 
   @GET('/character')
-  Future<CharacterListResponse> getCharacters(int page);
+  Future<CharacterListResponse> getCharacters(@Query('page') int page);
 
   @GET('/character/{id}')
   Future<Character> getCharacter(@Path('id') int id);

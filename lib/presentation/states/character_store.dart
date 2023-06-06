@@ -49,9 +49,9 @@ abstract class CharacterStoreBase with Store {
     String? species,
     String? type,
     String? gender,
-    bool clearList = false, // add this
+    bool clearList = false,
   }) async {
-    if (clearList) { // add this
+    if (clearList) {
       characters.clear();
       currentPageFiltered = 1;
     }
@@ -68,15 +68,44 @@ abstract class CharacterStoreBase with Store {
   }
 
   @action
+  Future<void> fetchNextPage({
+    String? name,
+    String? status,
+    String? species,
+    String? type,
+    String? gender,
+  }) async {
+    if (name?.isNotEmpty == true ||
+        status?.isNotEmpty == true ||
+        species?.isNotEmpty == true ||
+        type?.isNotEmpty == true ||
+        gender?.isNotEmpty == true) {
+      await fetchCharactersFiltered(
+        name: name,
+        status: status,
+        species: species,
+        type: type,
+        gender: gender,
+      );
+    } else {
+      await fetchCharacters();
+    }
+  }
+
+
+  @action
   Future<void> saveFavoriteCharacters() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('favoriteCharacters', favoriteCharacters.map((id) => id.toString()).toList());
+    prefs.setStringList('favoriteCharacters',
+        favoriteCharacters.map((id) => id.toString()).toList());
   }
 
   @action
   Future<void> loadFavoriteCharacters() async {
     final prefs = await SharedPreferences.getInstance();
-    final ids = prefs.getStringList('favoriteCharacters')?.map(int.parse).toList() ?? [];
+    final ids =
+        prefs.getStringList('favoriteCharacters')?.map(int.parse).toList() ??
+            [];
     favoriteCharacters = ObservableSet<int>.of(ids);
   }
 
