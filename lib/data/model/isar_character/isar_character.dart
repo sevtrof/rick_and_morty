@@ -1,3 +1,24 @@
 import 'package:isar/isar.dart';
-import 'package:rick_and_morty/data/model/location/location.dart';
-import 'package:rick_and_morty/data/model/origin/origin.dart';
+
+part 'isar_character.g.dart';
+
+@Collection()
+class CharacterIsar {
+  Id? id;
+
+  @Index()
+  late String name;
+
+  late String status;
+  late String species;
+  late String type;
+  late String gender;
+
+  late String origin;
+  late String location;
+
+  late String image;
+  late String episode;
+  late String url;
+  late String created;
+}

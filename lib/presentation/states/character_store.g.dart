@@ -135,6 +135,24 @@ mixin _$CharacterStore on CharacterStoreBase, Store {
             clearList: clearList));
   }
 
+  late final _$fetchNextPageAsyncAction =
+      AsyncAction('CharacterStoreBase.fetchNextPage', context: context);
+
+  @override
+  Future<void> fetchNextPage(
+      {String? name,
+      String? status,
+      String? species,
+      String? type,
+      String? gender}) {
+    return _$fetchNextPageAsyncAction.run(() => super.fetchNextPage(
+        name: name,
+        status: status,
+        species: species,
+        type: type,
+        gender: gender));
+  }
+
   late final _$saveFavoriteCharactersAsyncAction = AsyncAction(
       'CharacterStoreBase.saveFavoriteCharacters',
       context: context);

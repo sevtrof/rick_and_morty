@@ -8,8 +8,8 @@ class GetCharactersUseCase {
   GetCharactersUseCase({required this.repository});
 
   Future<List<Character>> call(int page) async {
-    final characterListResponse = await repository.getCharacters(page);
-    return characterListResponse.results
+    final results = await repository.getCharacters(page);
+    return results
         .map((characterData) => characterData.toDomain())
         .toList();
   }
