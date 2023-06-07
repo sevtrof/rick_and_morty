@@ -1,6 +1,10 @@
 # rick_and_morty
 
-A new Flutter project.
+```flutter pub get```
+
+```flutter gen-l10n```
+
+```dart run build_runner build```
 
 ## Getting Started
 
