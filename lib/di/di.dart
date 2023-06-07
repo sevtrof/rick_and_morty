@@ -24,22 +24,23 @@ void setupDependencies() {
   /// Repository
   getIt.registerLazySingleton<CharacterRepository>(() => CharacterRepository(
         getIt(),
-        getIt(),
       ));
 
-  /// Use cases
-  getIt.registerLazySingleton(() => GetCharactersUseCase(repository: getIt()));
+  /// Usecases
+  getIt.registerLazySingleton(() => GetCharactersUseCase(
+        getIt(),
+        getIt(),
+      ));
   getIt.registerLazySingleton(
       () => GetCharacterDetailUseCase(repository: getIt()));
   getIt.registerLazySingleton(
       () => GetCharactersFilteredUseCase(repository: getIt()));
 
-  /// Store
+  /// Stores
   getIt.registerLazySingleton(() => CharacterStore(
         getCharactersUseCase: getIt(),
         getCharactersFilteredUseCase: getIt(),
       ));
-
   getIt.registerLazySingleton(() => CharacterDetailStore(
         getCharacterDetailUseCase: getIt(),
       ));
