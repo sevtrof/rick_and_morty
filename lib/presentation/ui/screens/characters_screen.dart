@@ -50,8 +50,9 @@ class CharactersScreenState extends State<CharactersScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    const threshold = 200.0;
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - threshold) {
       characterStore.fetchNextPage(
         name: _nameController.text,
         status: _selectedStatus?.value ?? '',
