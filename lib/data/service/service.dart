@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import 'package:rick_and_morty/data/model/character/character.dart';
@@ -5,9 +7,14 @@ import 'package:rick_and_morty/data/model/response/response.dart';
 
 part 'service.g.dart';
 
-@RestApi(baseUrl: "https://rickandmortyapi.com/api")
+@RestApi()
 abstract class RickAndMortyService {
-  factory RickAndMortyService(Dio dio, {String baseUrl}) = _RickAndMortyService;
+  factory RickAndMortyService(Dio dio, {String? baseUrl}) {
+    baseUrl = Platform.isAndroid
+        ? "http://10.0.2.2:8080/api"
+        : "http://localhost:8080/api";
+    return _RickAndMortyService(dio, baseUrl: baseUrl);
+  }
 
   @GET('/character')
   Future<CharacterListResponse> getCharacters(@Query('page') int page);
