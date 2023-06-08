@@ -10,9 +10,11 @@ part 'service.g.dart';
 @RestApi()
 abstract class RickAndMortyService {
   factory RickAndMortyService(Dio dio, {String? baseUrl}) {
-    baseUrl = Platform.isAndroid
-        ? "http://10.0.2.2:8080/api"
-        : "http://localhost:8080/api";
+    if (Platform.isIOS) {
+      baseUrl = "http://localhost:8080/api";
+    } else if (Platform.isAndroid) {
+      baseUrl = "http://10.0.2.2:8080/api";
+    }
     return _RickAndMortyService(dio, baseUrl: baseUrl);
   }
 
