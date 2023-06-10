@@ -15,10 +15,6 @@ class CharacterRepository {
     this.service,
   );
 
-  Future<CharacterListResponse> getCharactersFromApi(int page) async {
-    return await service.getCharacters(page);
-  }
-
   Future<List<Character>> getCharactersFromIsar() async {
     if (isar == null) {
       final directory = await getApplicationDocumentsDirectory();
@@ -70,7 +66,7 @@ class CharacterRepository {
     });
   }
 
-  Future<CharacterListResponse> getCharactersFiltered(
+  Future<CharacterListResponse> getCharactersFromApi(
     int page,
     String? name,
     String? status,
@@ -79,7 +75,7 @@ class CharacterRepository {
     String? gender,
   ) async {
     try {
-      final characterListResponse = await service.getCharactersFiltered(
+      final characterListResponse = await service.getCharacters(
         page,
         name,
         status,
@@ -89,7 +85,7 @@ class CharacterRepository {
       );
       return characterListResponse;
     } catch (error) {
-      throw Exception('Error getting filtered characters: $error');
+      throw Exception('Error getting characters in usecase: $error');
     }
   }
 

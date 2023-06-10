@@ -9,14 +9,11 @@ part 'service.g.dart';
 abstract class RickAndMortyService {
   factory RickAndMortyService(Dio dio, {String baseUrl}) = _RickAndMortyService;
 
-  @GET('/character')
-  Future<CharacterListResponse> getCharacters(@Query('page') int page);
-
   @GET('/character/{id}')
   Future<Character> getCharacter(@Path('id') int id);
 
   @GET('/character/')
-  Future<CharacterListResponse> getCharactersFiltered(
+  Future<CharacterListResponse> getCharacters(
     @Query('page') int page,
     @Query('name') String? name,
     @Query('status') String? status,

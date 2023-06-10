@@ -13,7 +13,8 @@ class MockRickAndMortyService extends Mock implements RickAndMortyService {}
 
 class MockIsar extends Mock implements Isar {}
 
-class MockIsarCollection extends Mock implements IsarCollection<CharacterIsar> {}
+class MockIsarCollection extends Mock
+    implements IsarCollection<CharacterIsar> {}
 
 void main() {
   late CharacterRepository characterRepository;
@@ -56,25 +57,21 @@ void main() {
               url: 'https://rickandmortyapi.com/api/character/1',
               created: '2017-11-04T18:48:46.250Z',
             ),
-          ]); // Define the expected response
+          ]);
 
-      // Stub the behavior of the mock service
-      when(mockService.getCharacters(1)).thenAnswer(
-        (_) => Future.value(expectedResponse),
-      );
+      when(mockService.getCharacters(page, null, null, null, null, null))
+          .thenAnswer((_) => Future.value(expectedResponse));
 
-      final response = await characterRepository.getCharactersFromApi(page);
+      final response = await characterRepository.getCharactersFromApi(page,
+          null, null, null, null, null);
 
       expect(response, equals(expectedResponse));
-      verify(mockService.getCharacters(1)).called(1);
+      verify(mockService.getCharacters(page, null, null, null, null, null))
+          .called(1);
     });
 
     test('getCharactersFromIsar returns List<Character>', () async {
-      final charactersInIsar = [
-        CharacterIsar()
-      ];
-
-      when(mockIsar.characterIsars).thenReturn(MockIsarCollection());
+      final charactersInIsar = [CharacterIsar()];
       when(mockIsar.characterIsars.where().findAll())
           .thenAnswer((_) => Future.value(charactersInIsar));
 

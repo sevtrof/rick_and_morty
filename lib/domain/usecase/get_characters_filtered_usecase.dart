@@ -15,7 +15,7 @@ class GetCharactersFilteredUseCase {
       String? type,
       String? gender,
       ) async {
-    final characterListResponse = await repository.getCharactersFiltered(
+    final characterListResponse = await repository.getCharactersFromApi(
       page,
       name?.toLowerCase(),
       status,

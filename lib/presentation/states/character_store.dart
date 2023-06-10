@@ -37,9 +37,13 @@ abstract class CharacterStoreBase with Store {
 
   @action
   Future<void> fetchCharacters() async {
-    final result = await getCharactersUseCase.call(currentPage);
-    characters.addAll(result);
-    currentPage++;
+    try {
+      final result = await getCharactersUseCase.call(currentPage);
+      characters.addAll(result);
+      currentPage++;
+    } catch (e) {
+      throw Exception('Error fetching characters: $e');
+    }
   }
 
   @action
@@ -55,16 +59,20 @@ abstract class CharacterStoreBase with Store {
       characters.clear();
       currentPageFiltered = 1;
     }
-    final result = await getCharactersFilteredUseCase.call(
-      currentPageFiltered,
-      name,
-      status,
-      species,
-      type,
-      gender?.toLowerCase(),
-    );
-    characters.addAll(result);
-    currentPageFiltered++;
+    try {
+      final result = await getCharactersFilteredUseCase.call(
+        currentPageFiltered,
+        name,
+        status,
+        species,
+        type,
+        gender?.toLowerCase(),
+      );
+      characters.addAll(result);
+      currentPageFiltered++;
+    } catch (e) {
+      throw Exception('Error fetching filtered characters: $e');
+    }
   }
 
   @action
@@ -91,7 +99,6 @@ abstract class CharacterStoreBase with Store {
       await fetchCharacters();
     }
   }
-
 
   @action
   Future<void> saveFavoriteCharacters() async {
