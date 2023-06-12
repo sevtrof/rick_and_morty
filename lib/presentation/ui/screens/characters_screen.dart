@@ -21,6 +21,7 @@ class CharactersScreen extends StatefulWidget {
 class CharactersScreenState extends State<CharactersScreen> {
   final CharacterStore characterStore = GetIt.I<CharacterStore>();
   final ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
 
   late TextEditingController _nameController;
   Status? _selectedStatus;
@@ -51,15 +52,21 @@ class CharactersScreenState extends State<CharactersScreen> {
 
   void _onScroll() {
     const threshold = 200.0;
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - threshold) {
-      characterStore.fetchNextPage(
+    if (!_isLoading &&
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - threshold) {
+      _isLoading = true;
+      characterStore
+          .fetchNextPage(
         name: _nameController.text,
         status: _selectedStatus?.value ?? '',
         species: _speciesController.text,
         type: _typeController.text,
         gender: _selectedGender?.value ?? '',
-      );
+      )
+          .then((_) {
+        _isLoading = false;
+      });
     }
   }
 
