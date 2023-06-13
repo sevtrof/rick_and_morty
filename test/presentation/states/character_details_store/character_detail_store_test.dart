@@ -3,9 +3,9 @@ import 'package:mockito/mockito.dart';
 import 'package:rick_and_morty/domain/entity/character/character.dart';
 import 'package:rick_and_morty/domain/entity/location/location.dart';
 import 'package:rick_and_morty/domain/entity/origin/origin.dart';
-import 'package:rick_and_morty/domain/usecase/get_character_detail_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/get_character_detail_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rick_and_morty/presentation/states/character_detail_store.dart';
+import 'package:rick_and_morty/presentation/states/character/character_detail_store.dart';
 
 import 'character_detail_store_test.mocks.dart';
 

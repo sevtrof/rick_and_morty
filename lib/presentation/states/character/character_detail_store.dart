@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:rick_and_morty/domain/entity/character/character.dart';
-import 'package:rick_and_morty/domain/usecase/get_character_detail_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/get_character_detail_usecase.dart';
 
 part 'character_detail_store.g.dart';
 

@@ -6,7 +6,7 @@ import 'package:rick_and_morty/data/model/isar_character/isar_character.dart';
 import 'package:rick_and_morty/data/model/location/location.dart';
 import 'package:rick_and_morty/data/model/origin/origin.dart';
 import 'package:rick_and_morty/data/model/response/response.dart';
-import 'package:rick_and_morty/data/service/service.dart';
+import 'package:rick_and_morty/data/service/characters/service.dart';
 import 'package:rick_and_morty/data/repository/character_repository.dart';
 
 class MockRickAndMortyService extends Mock implements RickAndMortyService {}

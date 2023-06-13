@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rick_and_morty/domain/entity/character/gender.dart';
 import 'package:rick_and_morty/domain/entity/character/status.dart';
-import 'package:rick_and_morty/presentation/states/character_store.dart';
+import 'package:rick_and_morty/presentation/states/character/character_store.dart';
 import 'package:rick_and_morty/presentation/ui/screens/character_detail_screen.dart';
 import 'package:rick_and_morty/presentation/ui/widgets/dropdown_form_field.dart';
 import 'package:rick_and_morty/presentation/ui/widgets/text_form_field.dart';

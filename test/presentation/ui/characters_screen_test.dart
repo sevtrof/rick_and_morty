@@ -7,7 +7,7 @@ import 'package:rick_and_morty/domain/entity/location/location.dart';
 import 'package:rick_and_morty/domain/entity/origin/origin.dart';
 import 'package:rick_and_morty/presentation/ui/screens/characters_screen.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rick_and_morty/presentation/states/character_store.dart';
+import 'package:rick_and_morty/presentation/states/character/character_store.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

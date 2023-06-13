@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:rick_and_morty/presentation/states/character_detail_store.dart';
+import 'package:rick_and_morty/presentation/states/character/character_detail_store.dart';
 import 'package:rick_and_morty/styles/dimensions.dart';
 import 'package:rick_and_morty/styles/text_styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

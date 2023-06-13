@@ -13,5 +13,14 @@
   "gender": "Gender",
   "origin": "Origin",
   "location": "Location",
-  "episodes": "Episodes"
+
+  "episodes": "Episodes",
+  "profile": "Profile",
+  "logout": "Logout",
+  "register": "Register",
+  "login": "Login",
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "loggedIn": "You are logged in."
 }
