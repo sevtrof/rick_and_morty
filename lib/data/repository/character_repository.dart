@@ -92,4 +92,27 @@ class CharacterRepository {
   Future<Character> getCharacter(int id) async {
     return await service.getCharacter(id);
   }
+
+  Future<List<Character>> getCharactersByIds(List<int> ids) async {
+    try {
+      final response = await service.getCharactersByIds(ids.join(","));
+      return response.map((character) => Character(
+          id: character.id,
+          name: character.name,
+          status: character.status,
+          species: character.species,
+          type: character.type,
+          gender: character.gender,
+          origin: Origin(name: character.origin.name, url: ''),
+          location: Location(name: character.location.name, url: ''),
+          image: character.image,
+          episode: character.episode,
+          url: character.url,
+          created: character.created
+      )).toList();
+    } catch (error) {
+      throw Exception('Error getting characters by ids: $error');
+    }
+  }
+
 }

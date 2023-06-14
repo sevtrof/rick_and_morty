@@ -21,4 +21,7 @@ abstract class RickAndMortyService {
     @Query('type') String? type,
     @Query('gender') String? gender,
   );
+
+  @GET('/character/{ids}')
+  Future<List<Character>> getCharactersByIds(@Path('ids') String ids);
 }

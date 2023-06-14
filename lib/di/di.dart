@@ -9,6 +9,7 @@ import 'package:rick_and_morty/data/storage/auth_storage.dart';
 import 'package:rick_and_morty/domain/usecase/characters/add_favourite_character_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/fetch_favourite_characters_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_character_detail_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/get_characters_by_ids_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_filtered_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/remove_favourite_character_usecase.dart';
@@ -56,6 +57,8 @@ void setupDependencies() {
       () => GetCharacterDetailUseCase(repository: getIt()));
   getIt.registerLazySingleton(
       () => GetCharactersFilteredUseCase(repository: getIt()));
+  getIt.registerLazySingleton(
+      () => GetCharactersByIdsUseCase(repository: getIt()));
 
   /// Favourite chars
   getIt.registerLazySingleton(
@@ -78,6 +81,7 @@ void setupDependencies() {
         addFavouriteCharacterUseCase: getIt(),
         removeFavouriteCharacterUseCase: getIt(),
         fetchFavouriteCharactersUseCase: getIt(),
+        getCharactersByIdsUseCase: getIt(),
       ));
   getIt.registerLazySingleton(() => CharacterDetailStore(
         getCharacterDetailUseCase: getIt(),

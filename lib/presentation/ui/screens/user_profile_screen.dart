@@ -74,15 +74,25 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget _buildFavouriteCharactersList() {
-    return Observer(
-      builder: (_) => Expanded(
-        child: ListView.builder(
-          itemCount: _characterStore.favouriteCharacters.length,
-          itemBuilder: (context, index) {
-            return _buildCharacterTile(index);
-          },
-        ),
-      ),
+    return FutureBuilder(
+      future: _characterStore.fetchCharactersByIds(
+          _characterStore.favouriteCharacters.toList()),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Observer(
+            builder: (_) => Expanded(
+              child: ListView.builder(
+                itemCount: _characterStore.favouriteCharacters.length,
+                itemBuilder: (context, index) {
+                  return _buildCharacterTile(index);
+                },
+              ),
+            ),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 
@@ -92,18 +102,25 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     final favouriteCharacter = _characterStore.characters
         .firstWhere((character) => character.id == favouriteCharacterId);
 
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(favouriteCharacter.image),
-      ),
-      title: Text(favouriteCharacter.name),
-      subtitle: Text(favouriteCharacter.location.name),
-      trailing: IconButton(
-        icon: const Icon(Icons.share),
-        onPressed: () {
-          Share.share(AppLocalizations.of(context).share_checkout +
-              favouriteCharacter.name);
-        },
+    return Dismissible(
+      key: Key(favouriteCharacterId.toString()),
+      background: Container(color: Colors.red),
+      onDismissed: (direction) {
+        _characterStore.removeFavouriteCharacter(favouriteCharacterId);
+      },
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(favouriteCharacter.image),
+        ),
+        title: Text(favouriteCharacter.name),
+        subtitle: Text(favouriteCharacter.location.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.share),
+          onPressed: () {
+            Share.share(AppLocalizations.of(context).share_checkout +
+                favouriteCharacter.name);
+          },
+        ),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:rick_and_morty/domain/entity/character/character.dart';
 import 'package:rick_and_morty/domain/usecase/characters/add_favourite_character_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/fetch_favourite_characters_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/get_characters_by_ids_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_filtered_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/remove_favourite_character_usecase.dart';
@@ -17,6 +18,7 @@ abstract class CharacterStoreBase with Store {
   final AddFavouriteCharacterUseCase addFavouriteCharacterUseCase;
   final RemoveFavouriteCharacterUseCase removeFavouriteCharacterUseCase;
   final FetchFavouriteCharactersUseCase fetchFavouriteCharactersUseCase;
+  final GetCharactersByIdsUseCase getCharactersByIdsUseCase;
 
   CharacterStoreBase({
     required this.getCharactersUseCase,
@@ -24,6 +26,7 @@ abstract class CharacterStoreBase with Store {
     required this.addFavouriteCharacterUseCase,
     required this.removeFavouriteCharacterUseCase,
     required this.fetchFavouriteCharactersUseCase,
+    required this.getCharactersByIdsUseCase,
   });
 
   @observable
@@ -148,6 +151,17 @@ abstract class CharacterStoreBase with Store {
       throw Exception('Error fetching favourite characters: $e');
     }
   }
+
+  @action
+  Future<void> fetchCharactersByIds(List<int> ids) async {
+    try {
+      List<Character> fetchedCharacters = await getCharactersByIdsUseCase.call(ids);
+      characters.addAll(fetchedCharacters);
+    } catch (e) {
+      throw Exception('Error fetching characters by ids: $e');
+    }
+  }
+
 
   @action
   void clearCharacters() {
