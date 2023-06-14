@@ -6,15 +6,15 @@
 
 ```dart run build_runner build```
 
+
+
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a Rick and Morty project.
+Here you can search for any officially available character, filter them by gender, race, name, etc.; see their details (name, origin, etc.); add to your favorites.
 
-A few resources to get you started if this is your first Flutter project:
+Offline available for characters screen only for now. (Can't use character details screen for now without internet connection, because it fetches character by id from api)
+Added profile screen, where you can login or register in the app (currently updating my rick_and_morty_be project so you can login and register).
+Soonly I hope posting BE to docker containers (so you can have your own copy of be app) or unwrap the whole project on AWS/GCP, so you could use my own extended API.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To be updated.
