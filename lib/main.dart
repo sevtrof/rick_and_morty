@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/di/di.dart';
 import 'package:rick_and_morty/presentation/ui/screens/characters_screen.dart';
-import 'package:rick_and_morty/presentation/ui/screens/login_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rick_and_morty/presentation/ui/screens/user_profile_screen.dart';
 
 void main() {
   setupDependencies();
@@ -21,7 +21,7 @@ class MyAppState extends State<MyApp> {
 
   static final List<Widget> _pages = [
     const CharactersScreen(),
-    const LoginScreen(),
+    const UserProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

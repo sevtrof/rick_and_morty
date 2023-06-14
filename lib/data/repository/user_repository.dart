@@ -1,61 +1,139 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:rick_and_morty/data/service/user/user_api_service.dart';
+import 'package:rick_and_morty/data/storage/auth_storage.dart';
 import 'package:rick_and_morty/domain/common/either.dart';
 import 'package:rick_and_morty/domain/common/failure.dart';
 import 'package:rick_and_morty/domain/common/success.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
-  final UserApiService _userApiService;
-  static const String _userTokenKey = 'user_token';
+  UserApiService _userApiService;
+  final AuthStorage _authStorage;
+  final Dio _dio;
 
-  UserRepository(Dio dio) : _userApiService = UserApiService(dio);
+  UserRepository(this._userApiService, this._authStorage) : _dio = Dio() {
+    _setupDio();
+  }
+
+  void _setupDio() {
+    _dio.interceptors.add(InterceptorsWrapper(onRequest:
+        (RequestOptions options, RequestInterceptorHandler handler) async {
+      final token = await _authStorage.getUserToken();
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
+      return handler.next(options);
+    }));
+    _userApiService = UserApiService(_dio);
+  }
 
   Future<Either<Failure, Success<Map<String, dynamic>>>> register(
       String username, String email, String password) async {
-    try {
+    return _handleRequest(() async {
       final response = await _userApiService.register(
           {'username': username, "email": email, 'password': password});
 
-      if (response.response.statusCode == 201) {
-        Map<String, dynamic> responseData;
-        if (response.data is String) {
-          responseData = json.decode(response.data);
-        } else {
-          responseData = response.data;
-        }
-        return Either(success: Success(responseData));
-      } else {
-        return Either(failure: ServerFailure(message: 'Registration failed'));
-      }
-    } catch (e) {
-      return Either(
-          failure: ServerFailure(message: 'Error during registration: $e'));
-    }
+      final responseData = _parseResponseData(response.data);
+      await _authStorage.saveUserId(responseData['user_id']);
+
+      return Success(responseData);
+    });
   }
 
   Future<Either<Failure, Success<Map<String, dynamic>>>> login(
       String email, String password) async {
-    try {
+    return _handleRequest(() async {
       final response =
           await _userApiService.login({'email': email, 'password': password});
-      final token = response.data['token'];
-      if (token != null) {
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString(_userTokenKey, token);
-      }
-      return Either(success: Success(response.data));
+
+      await _authStorage.saveUserToken(response.data['token']);
+
+      return Success(response.data);
+    });
+  }
+
+  Future<Either<Failure, T>> _handleRequest<T>(
+      Future<T> Function() request) async {
+    try {
+      final result = await request();
+      return Either(success: result);
     } catch (e) {
-      return Either(failure: ServerFailure());
+      return Either(failure: ServerFailure(message: e.toString()));
+    }
+  }
+
+  Map<String, dynamic> _parseResponseData(dynamic data) {
+    if (data is String) {
+      return json.decode(data);
+    } else {
+      return data;
+    }
+  }
+
+  Future<Either<Failure, Success<void>>> addFavoriteCharacter(
+      int characterId) async {
+    try {
+      final response = await _userApiService
+          .addFavoriteCharacter({"characterId": characterId});
+      if (response.response.statusCode == 201) {
+        return Either(success: Success(null));
+      } else {
+        return Either(
+            failure:
+                ServerFailure(message: 'Failed to add favorite character'));
+      }
+    } catch (e) {
+      return Either(
+          failure: ServerFailure(
+              message: 'Error during adding favorite character: $e'));
+    }
+  }
+
+  Future<Either<Failure, Success<void>>> removeFavoriteCharacter(
+      int characterId) async {
+    try {
+      final response = await _userApiService
+          .removeFavoriteCharacter({"characterId": characterId});
+      if (response.response.statusCode == 200) {
+        return Either(success: Success(null));
+      } else {
+        return Either(
+            failure:
+                ServerFailure(message: 'Failed to remove favorite character'));
+      }
+    } catch (e) {
+      return Either(
+          failure: ServerFailure(
+              message: 'Error during removing favorite character: $e'));
+    }
+  }
+
+  Future<Either<Failure, Success<List<int>>>> fetchFavoriteCharacters() async {
+    try {
+      final response = await _userApiService.fetchFavoriteCharacters();
+      if (response.response.statusCode == 200) {
+        List<int> characterIds;
+        if (response.data is String) {
+          characterIds = List<int>.from(json.decode(response.data));
+        } else {
+          characterIds = List<int>.from(response.data);
+        }
+        return Either(success: Success(characterIds));
+      } else {
+        return Either(
+            failure:
+                ServerFailure(message: 'Failed to fetch favorite characters'));
+      }
+    } catch (e) {
+      return Either(
+          failure: ServerFailure(
+              message: 'Error during fetching favorite characters: $e'));
     }
   }
 
   Future<Either<Failure, Success<void>>> logout() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.remove(_userTokenKey);
+      await _authStorage.removeUserToken();
       await _userApiService.logout();
       return Either(success: Success(null));
     } catch (e) {
@@ -64,7 +142,7 @@ class UserRepository {
   }
 
   Future<bool> isLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_userTokenKey) != null;
+    final token = await _authStorage.getUserToken();
+    return token != null;
   }
 }

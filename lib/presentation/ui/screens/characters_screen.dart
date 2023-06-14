@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:rick_and_morty/domain/entity/character/gender.dart';
 import 'package:rick_and_morty/domain/entity/character/status.dart';
 import 'package:rick_and_morty/presentation/states/character/character_store.dart';
+import 'package:rick_and_morty/presentation/states/profile/user_store.dart';
 import 'package:rick_and_morty/presentation/ui/screens/character_detail_screen.dart';
 import 'package:rick_and_morty/presentation/ui/widgets/dropdown_form_field.dart';
 import 'package:rick_and_morty/presentation/ui/widgets/text_form_field.dart';
@@ -20,6 +21,7 @@ class CharactersScreen extends StatefulWidget {
 
 class CharactersScreenState extends State<CharactersScreen> {
   final CharacterStore characterStore = GetIt.I<CharacterStore>();
+  final UserStore userStore = GetIt.I<UserStore>();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
 
@@ -33,7 +35,6 @@ class CharactersScreenState extends State<CharactersScreen> {
   void initState() {
     super.initState();
     characterStore.fetchCharacters();
-    characterStore.loadFavoriteCharacters();
 
     _scrollController.addListener(_onScroll);
     _nameController = TextEditingController();
@@ -86,6 +87,22 @@ class CharactersScreenState extends State<CharactersScreen> {
         clearList: true,
       );
     }
+  }
+
+  void _showLoginPopup() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context).login_required),
+        content: Text(AppLocalizations.of(context).login_to_your_profile),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(AppLocalizations.of(context).okay),
+          ),
+        ],
+      ),
+    );
   }
 
   AlertDialog _buildFilterDialog() {
@@ -233,19 +250,23 @@ class CharactersScreenState extends State<CharactersScreen> {
                         trailing: Observer(
                           builder: (_) => IconButton(
                             icon: Icon(
-                              characterStore.favoriteCharacters
+                              characterStore.favouriteCharacters
                                       .contains(character.id)
                                   ? Icons.favorite
                                   : Icons.favorite_border,
                             ),
                             onPressed: () {
-                              if (characterStore.favoriteCharacters
-                                  .contains(character.id)) {
-                                characterStore
-                                    .removeFavoriteCharacter(character.id);
+                              if (userStore.isLoggedIn) {
+                                if (characterStore.favouriteCharacters
+                                    .contains(character.id)) {
+                                  characterStore
+                                      .removeFavouriteCharacter(character.id);
+                                } else {
+                                  characterStore
+                                      .addFavouriteCharacter(character.id);
+                                }
                               } else {
-                                characterStore
-                                    .addFavoriteCharacter(character.id);
+                                _showLoginPopup();
                               }
                             },
                           ),

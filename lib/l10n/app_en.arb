@@ -5,6 +5,7 @@
   "reset": "Reset",
   "cancel": "Cancel",
   "apply": "Apply",
+  "okay": "Okay",
   "characters": "Characters",
   "status": "Status",
   "name": "Name",
@@ -22,5 +23,10 @@
   "username": "Username",
   "email": "Email",
   "password": "Password",
-  "loggedIn": "You are logged in."
+  "loggedIn": "You are logged in.",
+
+  "favourite_characters": "Favourite characters: ",
+  "share_checkout": "Check out this character: ",
+  "login_required": "Login required",
+  "login_to_your_profile": "Login to your profile"
 }

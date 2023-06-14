@@ -1,25 +1,36 @@
 import 'package:mobx/mobx.dart';
+import 'package:rick_and_morty/domain/usecase/characters/fetch_favourite_characters_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/user/user_login_status_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/user/user_login_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/user/user_logout_usecase.dart';
 
-part 'login_store.g.dart';
+part 'user_store.g.dart';
 
-class LoginStore = LoginStoreBase with _$LoginStore;
+class UserStore = UserStoreBase with _$UserStore;
 
-abstract class LoginStoreBase with Store {
+abstract class UserStoreBase with Store {
   final UserLoginUseCase loginUseCase;
   final UserLogoutUseCase logoutUseCase;
   final UserLoginStatusUseCase loginStatusUseCase;
+  final FetchFavouriteCharactersUseCase fetchFavouriteCharactersUseCase;
 
-  LoginStoreBase({
+  UserStoreBase({
     required this.loginUseCase,
     required this.logoutUseCase,
     required this.loginStatusUseCase,
+    required this.fetchFavouriteCharactersUseCase,
   });
 
   @observable
   bool isLoggedIn = false;
+
+  @observable
+  List<int> favoriteCharacters = [];
+
+  @action
+  Future<void> logout() async {
+    await logoutUseCase.call();
+  }
 
   @action
   Future<void> checkLoginStatus() async {
@@ -32,11 +43,5 @@ abstract class LoginStoreBase with Store {
     if (result.fold((_) => false, (_) => true)) {
       await checkLoginStatus();
     }
-  }
-
-  @action
-  Future<void> logout() async {
-    await logoutUseCase.call();
-    await checkLoginStatus();
   }
 }

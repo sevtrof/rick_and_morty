@@ -1,7 +1,10 @@
 import 'package:mobx/mobx.dart';
 import 'package:rick_and_morty/domain/entity/character/character.dart';
+import 'package:rick_and_morty/domain/usecase/characters/add_favourite_character_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/fetch_favourite_characters_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_filtered_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/remove_favourite_character_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'character_store.g.dart';
@@ -11,17 +14,23 @@ class CharacterStore = CharacterStoreBase with _$CharacterStore;
 abstract class CharacterStoreBase with Store {
   final GetCharactersUseCase getCharactersUseCase;
   final GetCharactersFilteredUseCase getCharactersFilteredUseCase;
+  final AddFavouriteCharacterUseCase addFavouriteCharacterUseCase;
+  final RemoveFavouriteCharacterUseCase removeFavouriteCharacterUseCase;
+  final FetchFavouriteCharactersUseCase fetchFavouriteCharactersUseCase;
 
   CharacterStoreBase({
     required this.getCharactersUseCase,
     required this.getCharactersFilteredUseCase,
+    required this.addFavouriteCharacterUseCase,
+    required this.removeFavouriteCharacterUseCase,
+    required this.fetchFavouriteCharactersUseCase,
   });
 
   @observable
   ObservableList<Character> characters = ObservableList<Character>();
 
   @observable
-  ObservableSet<int> favoriteCharacters = ObservableSet<int>();
+  ObservableSet<int> favouriteCharacters = ObservableSet<int>();
 
   @observable
   Character? selectedCharacter;
@@ -101,31 +110,43 @@ abstract class CharacterStoreBase with Store {
   }
 
   @action
-  Future<void> saveFavoriteCharacters() async {
+  Future<void> saveFavouriteCharacters() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('favoriteCharacters',
-        favoriteCharacters.map((id) => id.toString()).toList());
+    prefs.setStringList('favouriteCharacters',
+        favouriteCharacters.map((id) => id.toString()).toList());
   }
 
   @action
-  Future<void> loadFavoriteCharacters() async {
-    final prefs = await SharedPreferences.getInstance();
-    final ids =
-        prefs.getStringList('favoriteCharacters')?.map(int.parse).toList() ??
-            [];
-    favoriteCharacters = ObservableSet<int>.of(ids);
+  Future<void> addFavouriteCharacter(int characterId) async {
+    try {
+      await addFavouriteCharacterUseCase.call(characterId);
+      favouriteCharacters.add(characterId);
+      saveFavouriteCharacters();
+    } catch (e) {
+      throw Exception('Error adding favourite character: $e');
+    }
   }
 
   @action
-  void addFavoriteCharacter(int id) {
-    favoriteCharacters.add(id);
-    saveFavoriteCharacters();
+  Future<void> removeFavouriteCharacter(int characterId) async {
+    try {
+      await removeFavouriteCharacterUseCase.call(characterId);
+      favouriteCharacters.remove(characterId);
+      saveFavouriteCharacters();
+    } catch (e) {
+      throw Exception('Error removing favourite character: $e');
+    }
   }
 
   @action
-  void removeFavoriteCharacter(int id) {
-    favoriteCharacters.remove(id);
-    saveFavoriteCharacters();
+  Future<void> fetchFavouriteCharacters() async {
+    try {
+      final result = await fetchFavouriteCharactersUseCase.call();
+      favouriteCharacters =
+          ObservableSet<int>.of(result.success!.value.map((id) => id));
+    } catch (e) {
+      throw Exception('Error fetching favourite characters: $e');
+    }
   }
 
   @action
