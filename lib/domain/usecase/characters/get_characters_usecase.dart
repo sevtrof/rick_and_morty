@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:isar/isar.dart';
 import 'package:rick_and_morty/data/model/character/character.dart';
-import 'package:rick_and_morty/data/model/isar_character/isar_character.dart';
+import 'package:rick_and_morty/data/model/isar/character/isar_character.dart';
 import 'package:rick_and_morty/data/repository/character_repository.dart';
 import 'package:rick_and_morty/domain/entity/character/character.dart'
     as domain;

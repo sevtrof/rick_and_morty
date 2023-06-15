@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rick_and_morty/di/di.dart';
 import 'package:rick_and_morty/presentation/ui/screens/characters_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rick_and_morty/presentation/ui/screens/news_screen.dart';
 import 'package:rick_and_morty/presentation/ui/screens/user_profile_screen.dart';
 
 void main() {
@@ -21,6 +22,7 @@ class MyAppState extends State<MyApp> {
 
   static final List<Widget> _pages = [
     const CharactersScreen(),
+    const NewsScreen(),
     const UserProfileScreen(),
   ];
 
@@ -46,6 +48,10 @@ class MyAppState extends State<MyApp> {
             BottomNavigationBarItem(
               icon: Icon(Icons.list),
               label: 'Characters',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.access_time),
+              label: 'News',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

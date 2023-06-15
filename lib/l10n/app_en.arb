@@ -28,5 +28,7 @@
   "favourite_characters": "Favourite characters: ",
   "share_checkout": "Check out this character: ",
   "login_required": "Login required",
-  "login_to_your_profile": "Login to your profile"
+  "login_to_your_profile": "Login to your profile",
+
+  "news": "News"
 }

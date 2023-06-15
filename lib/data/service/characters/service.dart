@@ -5,14 +5,14 @@ import 'package:rick_and_morty/data/model/response/response.dart';
 
 part 'service.g.dart';
 
-@RestApi(baseUrl: "https://rickandmortyapi.com/api")
+@RestApi(baseUrl: "http://localhost:8080/api")
 abstract class RickAndMortyService {
   factory RickAndMortyService(Dio dio, {String baseUrl}) = _RickAndMortyService;
 
   @GET('/character/{id}')
   Future<Character> getCharacter(@Path('id') int id);
 
-  @GET('/character/')
+  @GET('/character')
   Future<CharacterListResponse> getCharacters(
     @Query('page') int page,
     @Query('name') String? name,

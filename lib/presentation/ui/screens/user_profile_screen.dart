@@ -59,6 +59,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildUserInfo(),
           _buildFavouriteCharactersHeader(),
           _buildFavouriteCharactersList(),
         ],
@@ -189,4 +190,29 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
+
+  Widget _buildUserInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (_userStore.user.profilePicture.isNotEmpty)
+          CircleAvatar(
+            backgroundImage: NetworkImage(_userStore.user.profilePicture),
+            radius: AppDimensions.RADIUS_60,
+          ),
+        const SizedBox(height: AppDimensions.ITEM_HEIGHT_8),
+        Text(
+          _userStore.user.name,
+          style: AppTextStyles.heading1
+        ),
+        const SizedBox(height: AppDimensions.ITEM_HEIGHT_4),
+        Text(
+          _userStore.user.email,
+          style: AppTextStyles.bodyText
+        ),
+        const SizedBox(height: AppDimensions.ITEM_HEIGHT_16),
+      ],
+    );
+  }
+
 }

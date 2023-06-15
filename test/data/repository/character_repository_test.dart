@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:isar/isar.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rick_and_morty/data/model/character/character.dart';
-import 'package:rick_and_morty/data/model/isar_character/isar_character.dart';
+import 'package:rick_and_morty/data/model/isar/character/isar_character.dart';
 import 'package:rick_and_morty/data/model/location/location.dart';
 import 'package:rick_and_morty/data/model/origin/origin.dart';
 import 'package:rick_and_morty/data/model/response/response.dart';

@@ -3,15 +3,26 @@ import 'package:mockito/mockito.dart';
 import 'package:rick_and_morty/domain/entity/character/character.dart';
 import 'package:rick_and_morty/domain/entity/location/location.dart';
 import 'package:rick_and_morty/domain/entity/origin/origin.dart';
+import 'package:rick_and_morty/domain/usecase/characters/add_favourite_character_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/fetch_favourite_characters_usecase.dart';
+import 'package:rick_and_morty/domain/usecase/characters/get_characters_by_ids_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_usecase.dart';
 import 'package:rick_and_morty/domain/usecase/characters/get_characters_filtered_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rick_and_morty/domain/usecase/characters/remove_favourite_character_usecase.dart';
 import 'package:rick_and_morty/presentation/states/character/character_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'character_store_test.mocks.dart';
 
-@GenerateMocks([GetCharactersUseCase, GetCharactersFilteredUseCase])
+@GenerateMocks([
+  GetCharactersUseCase,
+  GetCharactersFilteredUseCase,
+  AddFavouriteCharacterUseCase,
+  RemoveFavouriteCharacterUseCase,
+  FetchFavouriteCharactersUseCase,
+  GetCharactersByIdsUseCase,
+])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
@@ -20,14 +31,26 @@ void main() {
     late CharacterStore store;
     late MockGetCharactersUseCase mockGetCharactersUseCase;
     late MockGetCharactersFilteredUseCase mockGetCharactersFilteredUseCase;
+    late MockAddFavouriteCharacterUseCase mockAddFavouriteCharacterUseCase;
+    late MockRemoveFavouriteCharacterUseCase mockRemoveFavouriteCharacterUseCase;
+    late MockFetchFavouriteCharactersUseCase mockFetchFavouriteCharactersUseCase;
+    late MockGetCharactersByIdsUseCase mockGetCharactersByIdsUseCase;
     late Character rick;
 
     setUp(() {
       mockGetCharactersUseCase = MockGetCharactersUseCase();
       mockGetCharactersFilteredUseCase = MockGetCharactersFilteredUseCase();
+      mockAddFavouriteCharacterUseCase = MockAddFavouriteCharacterUseCase();
+      mockRemoveFavouriteCharacterUseCase = MockRemoveFavouriteCharacterUseCase();
+      mockFetchFavouriteCharactersUseCase = MockFetchFavouriteCharactersUseCase();
+      mockGetCharactersByIdsUseCase = MockGetCharactersByIdsUseCase();
       store = CharacterStore(
         getCharactersUseCase: mockGetCharactersUseCase,
         getCharactersFilteredUseCase: mockGetCharactersFilteredUseCase,
+        addFavouriteCharacterUseCase: mockAddFavouriteCharacterUseCase,
+        removeFavouriteCharacterUseCase: mockRemoveFavouriteCharacterUseCase,
+        fetchFavouriteCharactersUseCase: mockFetchFavouriteCharactersUseCase,
+        getCharactersByIdsUseCase: mockGetCharactersByIdsUseCase,
       );
       rick = const Character(
         id: 1,
@@ -105,17 +128,17 @@ void main() {
 
     test('addFavoriteCharacter adds character to favorites', () async {
       const characterId = 1;
-      store.addFavoriteCharacter(characterId);
+      store.addFavouriteCharacter(characterId);
 
-      expect(store.favoriteCharacters.contains(characterId), true);
+      expect(store.favouriteCharacters.contains(characterId), true);
     });
 
     test('removeFavoriteCharacter removes character from favorites', () async {
       const characterId = 1;
-      store.addFavoriteCharacter(characterId);
-      store.removeFavoriteCharacter(characterId);
+      store.addFavouriteCharacter(characterId);
+      store.removeFavouriteCharacter(characterId);
 
-      expect(store.favoriteCharacters.contains(characterId), false);
+      expect(store.favouriteCharacters.contains(characterId), false);
     });
   });
 }
