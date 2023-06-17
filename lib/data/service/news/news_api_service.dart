@@ -7,7 +7,7 @@ part 'news_api_service.g.dart';
 abstract class NewsApiService {
   factory NewsApiService(Dio dio, {String baseUrl}) = _NewsApiService;
 
-  @POST("/news")
+  @GET("/news")
   Future<HttpResponse> fetchNews(
       @Query('page') int page);
 }
